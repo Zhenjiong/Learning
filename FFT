@@ -1,0 +1,21 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+"""
+    关于快速傅里叶变换的使用
+"""
+import numpy as np
+from scipy.fftpack import fft
+import matplotlib.pyplot as plt
+
+fs = 2000.0 # 采样频率2000Hz
+N = 1500 # 数据点数1500个
+n = np.arange(0,N-1,1)
+t = n/fs
+y = 7 * np.sin(2 * np.pi * 180 * t)
+pu = fft(y) # 傅里叶变换
+f = n*fs/N
+puf = abs(pu)
+puff = 2*puf/N
+puang = np.angle(pu)
+plt.plot(f,puff)
+plt.show()
