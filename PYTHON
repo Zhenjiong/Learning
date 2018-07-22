@@ -1,0 +1,137 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# 以下是python2的情况
+# 格式化得到字符串
+# %d 整数 ; %f 浮点数 ; %s 字符串 ; %x 十六进制整数 ; %% 普通%字符
+
+# 四舍六入五凑偶处理浮点数字  由于计算机是转换成二进制进行计算再换回十进制，会引起误差
+round(2.5)  # 四舍五入至整数，返回float类型
+round(2.556, 2)  # 保留至2位小数，四舍六入五凑奇
+# 避免上述舍入机器误差，可以让计算机用十进制做运算（速度会慢）
+import decimal
+
+
+# 使用四舍五入法,按有效数字保留,返回数字
+
+def round_sign(number, significant=1):
+    i = 0
+    j = 0
+    while number > 10:
+        number = number / 10
+        i = i + 1
+    while number < 1:
+        number = number * 10
+        j = j + 1
+    for x in list(range(significant)):
+        number = number * 10
+    number = number / 10
+    p = round(number)
+    p = p * 10
+    for x in list(range(significant)):
+        p = p / 10
+    for x in list(range(i)):
+        p = p * 10
+    for x in list(range(j)):
+        p = p / 10
+    return p
+
+
+# 关于list 存放的数据类型可以不同,类似于C++数组，一维多维更自由，从0开始数数组
+a = [4, 2, 8, 0]
+a.append(9)  # 末尾追加
+a.insert(2, 'ppe')  # 2处插入'ppe'
+a.pop()  # 删除末尾并返回末尾元素
+a.pop(2)  # 删除2处元素并返回它
+a[3] = 'eee'  # 直接赋值
+len(a)  # 获取长度
+a[-2]  # 倒数第二个的元素值
+
+# 关于tuple元组 指向不可改变，不可赋值。定义时就定死
+t = (1,)  # 注意，只有一个元素时，必须加 , 避免歧义
+t2 = (1, 5, [43, 90])  # 注意，其实tuple内list本身内容可以变，但必须指向这个list
+# 关于dict字典，key-value对应 key的数值类型必须是不可变的量，且不重复
+d = {'john': 98, 'bob': 200, 'nancy': 78}  # 定义一个dict
+d['john']  # key对应的value
+d.pop('john')  # 删除这个key,返回对应的value
+
+# 关于set集合 是无序无重复的元素集合 只存储了key而没有value，仍然要是不可变对象
+s1 = set([1, 2, 3])  # 创建set用list作为输入 实际存储的是1 2 3 这三个元素
+s1.add(9)
+s1.remove(1)  # 添加元素与删除元素
+s2 = set([3, 8, 2])
+s1 & s2  # 交集
+s1 | s2  # 并集
+st = 'asdf'
+bb = st.replace('a', 'G')  # 对于str类型，返回替换后的字符串，本身str是不可变量
+st.lower()  # 小写
+
+# slice 切片
+L = range(101)
+L[:100:2]  # 返回[0,2,4,......,98]
+
+# 关于迭代for循环
+# 判断是否可迭代
+from collections import Iterable
+
+x = 123
+isinstance(x, Iterable)
+
+# 关于dict的迭代补充
+'''
+for key in d: # 
+for k,v in d.iteritems(): #
+for value in d.itervalues(): #
+'''
+# 该死的列表生成器
+[x * x for x in range(1, 11)]  # 得到x*x的list [1,4...,100]
+[x * x for x in range(1, 11) if x % 2 == 0]  # 偶数的x*x
+
+# 生成器generator 循环操作产生 断点作用
+g = (x * x for x in range(10))  # 创建generator
+g.next()  # g保存算法，每次调用g.next()计算一次。没法算时抛出StopIteration错误
+
+
+def fib(max):  # 斐波那契数列
+    n, a, b = 0, 0, 1
+    while n < max:
+        yield b  # yield关键字，将函数转化为generator。调用fib一次，算到此截止。循环迭代调用
+        a, b = b, a + b
+        n = n + 1
+
+
+# 一吨难以使用的高级函数
+map(str, [1, 2, 3, 4, 5, 6, 7, 8, 9])  # map(f,list) 讲f依次作用到list的每个元素里，返回一个list
+
+
+def add(x, y):
+    return x + y
+
+    # f要求放2个参数，讲结果迭代计算
+
+
+reduce(add, [1, 3, 5, 7, 9])  # reduce(f,list) reduce(f, [x1, x2, x3, x4]) = f(f(f(x1, x2), x3), x4)
+
+sorted(['bob', 'about', 'Zoo', 'Credit'])  # sorted 排序
+
+
+def cmp_ignore_case(s1, s2):
+    u1 = s1.upper()
+    u2 = s2.upper()
+    if u1 < u2:
+        return -1  # 返回-1，u1放左边
+    if u1 > u2:
+        return 1
+    return 0
+
+
+sorted(['bob', 'about', 'Zoo', 'Credit'], cmp_ignore_case)  # 忽略大小写排序
+
+# 正则表达式
+# \d : one number
+# \w : one number or one alphabet
+# .  : all thing
+# \d{3}\s+\d{3,8}  3个数字，至少一个空格，3至8个数字
+import re
+re.match('[0-9a-zA-Z]{1,5}','john') # re.match(a,b) 判断b是否匹配a，是返回Match对象，否返回None
+re.split('\s+','a b ec cac a  s') # re.split(a,b) b按a切割，返回切好的list。切出的元素中都不含有a
