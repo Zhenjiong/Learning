@@ -1,0 +1,44 @@
+#20181008
+'''---------note3.txt---------'''
+# 20181008
+列表的长度  len(a)
+for i, v in enumerate(a):
+    print(i, v)
+
+查找
+37 in a         返回 True / Flase
+
+a.count(1)      返回1元素出现了几次
+a.index(1)      返回1元素的位置
+
+'''-----------try in 20181008--------------'''
+#!/usr/bin/python3
+# -*- coding: utf-8 
+print("helllo")
+a = [0, 1, 4, 9, 16]
+b = [ str(i) for i in a if i % 2 == 1]
+print(b)
+print(list(map(int,b)))
+
+L = [3,7,4,1,10,8,5]
+p = []
+for i in L:
+    if i % 2 == 0:
+        p.append(1/i)
+    elif i % 2 == 1:
+        p.append(-i)
+print(p)
+
+tt = []
+for i in L:
+    tt = tt+[ 1/i if i % 2 == 0 else -i]
+print(tt)
+
+
+x = [2,5,-1,4]
+t = []
+s = 0
+for i in range(len(x)):
+    s = s + x[i]
+    t.append(s)
+print(t)
