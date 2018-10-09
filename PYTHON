@@ -135,3 +135,17 @@ sorted(['bob', 'about', 'Zoo', 'Credit'], cmp_ignore_case)  # 忽略大小写排
 import re
 re.match('[0-9a-zA-Z]{1,5}','john') # re.match(a,b) 判断b是否匹配a，是返回Match对象，否返回None
 re.split('\s+','a b ec cac a  s') # re.split(a,b) b按a切割，返回切好的list。切出的元素中都不含有a
+
+'''----------os------------'''
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+
+import os
+
+# open and close
+with open('text.txt', 'r') as f:
+    print f.read()        # 读取全部内容 read(size)
+    print f.readline()    # 调用一次，读取一行
+    print f.readlines()   # 一次性读取所有内容，返回list, 每一行成为list的一个元素(末尾均有'\n')
+with open('text.txt', 'w') as f:
+    f.write('Hello, world!')   # 写文件，并非追加，会清零从开头开始写，写完指针会停留在那里，不会自动换行
