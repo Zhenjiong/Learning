@@ -42,3 +42,126 @@ for i in range(len(x)):
     s = s + x[i]
     t.append(s)
 print(t)
+
+# 20181022
+
+''''-------note3.txt-------'''
+# 20181015
+格式化
+count = 5
+'afsd{}'.format(count)
+
+分析布尔值的列表
+all()
+any()
+
+将字符串作为python语句运行，返回结果
+eval()
+
+函数内部不能直接更改全局变量，非要调用
+heheh = 9
+def f():
+    global heheh
+    heheh = 7
+    print(heheh)
+
+
+命令行参数
+
+command_argv.py
+
+import sys
+
+print ('参数个数为:', len(sys.argv), '个参数。')
+print ('参数列表:', str(sys.argv))
+
+a = int(sys.argv[1])
+print('第一个参数的平方是: ', a**2)
+
+
+python3 command_para.py 5 6
+运行结果：
+
+参数个数为: 3 个参数。
+参数列表: ['command_para.py', '5', '6']
+第一个参数的平方是:  25
+
+
+
+
+
+# command_argparse.py
+# 来源： https://blog.csdn.net/lis_12/article/details/54618868
+
+import argparse
+
+def cmd():
+    args = argparse.ArgumentParser(description = 'Personal Information ',epilog = 'Information end ')
+    #必写属性,第一位
+    args.add_argument("name",         type = str,                  help = "Your name")
+    #必写属性,第二位
+    args.add_argument("birth",        type = str,                  help = "birthday")
+    #可选属性,默认为None
+    args.add_argument("-r",'--race',  type = str, dest = "race",   help = u"民族")
+    #可选属性,默认为0,范围必须在25~35
+    args.add_argument("-a", "--age",  type = int, dest = "age",    help = "Your age",         default = 0,      choices=range(25,36))
+    #可选属性,默认为male
+    args.add_argument('-g',"--gender",   type = str, dest = "gender",    help = 'Your gender',         default = 'male', choices=['male', 'female'])
+    #可选属性,默认为None,-p后可接多个参数
+    args.add_argument("-p","--parent",type = str, dest = 'parent', help = "Your parent",      default = "None", nargs = '*')
+    #可选属性,默认为None,-o后可接多个参数
+    args.add_argument("-o","--other", type = str, dest = 'other',  help = "other Information",required = False,nargs = '*')
+
+    args = args.parse_args()#返回一个命名空间,如果想要使用变量,可用args.attr
+    #print( "argparse.args=",args,type(args))
+    d = args.__dict__
+    for key,value in d.items():
+        print( '%s = %s'%(key,value))
+    return args
+
+if __name__=="__main__":
+    args = cmd()
+    print('---使用例子---: ', args.name)
+python3 command_argparse.py -g male 张三 2005-4-22 -a 27
+
+python3 command_argparse.py -a 27 -g male 张三 2005-4-22
+
+输出：
+
+name = 张三
+birth = 2005-4-22
+race = None
+age = 27
+gender = male
+parent = None
+other = None
+---使用例子---:  张三
+
+''''---------------20181022.py--------------------'''
+
+# 20181022
+
+class travel:
+    count = 0
+    def __init__(self, name, x,y):
+        self.name = name
+        self.x = x
+        self.y = y
+        travel.count += 1
+        print("init fun: ", travel.count)
+    def report(self):                                               # 带有self才是对象的方法，没有就是类的方法
+        print("我是{}, 我在({},{})。".format(self.name, self.x, self.y))
+    def howmany():
+        print("共有{}个人。".format(travel.count))
+    def __del__(self):                                             # 对象被删除时被调用
+        travel.count -= 1
+        print("del fun: ", travel.count)
+
+
+p = travel('王高山', 44, 110)
+p.report()
+
+p2 = travel('张顺', 32, 125)
+p2.report()
+travel.howmany()
+# p2.howmany()
