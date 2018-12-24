@@ -1,0 +1,55 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import math
+import random
+import pandas as pd
+
+class visitlist:
+    def __init__(self, count=0):
+        self.unvisitedlist=[i for i in range(count)]
+        self.visitedlist=list()
+        self.unvisitednum=count
+
+    def visit(self, pointId):
+        self.visitedlist.append(pointId)
+        self.unvisitedlist.remove(pointId)
+        self.unvisitednum -= 1
+
+def  dist(a, b):
+    return math.sqrt(np.power(a-b, 2).sum())
+
+def dbscan(dataSet, eps, minPts):
+    nPoints = dataSet.shape[0]
+    vPoints = visitlist(count = nPoints)
+    k = -1
+    C = [-1 for i in range(nPoints)]
+    while(vPoints.unvisitednum > 0):
+        p = random.choice(vPoints.unvisitedlist)
+        vPoints.visit(p)
+        N = [i for i in range(nPoints) if dist(dataSet[i], dataSet[p])<= eps]
+        if  len(N) >= minPts:
+            k += 1
+            C[p]=k
+            for p1 in N:
+                if p1 in vPoints.unvisitedlist:
+                    vPoints.visit(p1)
+                    M=[i for i in range(nPoints) if dist(dataSet[i], dataSet[p1]) <= eps]
+                    if len(M) >= minPts:
+                        for i in M:
+                            if i not in N:
+                                N.append(i)
+                    if  C[p1] == -1:
+                        C[p1]= k
+        else:
+            C[p]=-1
+    return C
+df = pd.read_csv('Muller_p169.csv')
+X = np.array(df.x)
+Y = np.array(df.y)
+data = np.column_stack((X,Y))
+cls = dbscan(data, 2, 2)
+df['cls'] = cls
+plt.scatter(df[df.cls==0].x, df[df.cls==0].y)
+plt.scatter(df[df.cls==1].x, df[df.cls==1].y)
+plt.scatter(df[df.cls==2].x, df[df.cls==2].y)
+plt.show()
